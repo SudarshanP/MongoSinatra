@@ -17,7 +17,7 @@ class MyAPI < Sinatra::Base
 	   ret
 	end
 	get '/update' do
-       (JSON.parse(request.body.read)).to_json
+       request.body.read
 	end
 	get '/env' do
 	   ENV.inspect
