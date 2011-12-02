@@ -10,6 +10,6 @@ get '/' do
    
    ret = "Failed"
    ret = "Hello World from Sinatra & mongodb:" if db
-   ret = ret + coll.count
+   ret += "...Got bookmarks" if coll
    ret
 end
