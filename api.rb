@@ -16,7 +16,7 @@ class MyAPI < Sinatra::Base
 	   ret += "No bookmarks" unless coll
 	   ret
 	end
-	get '/update' do
+	get '/update/' do
        request.body.read
 	end
 	get '/env' do
