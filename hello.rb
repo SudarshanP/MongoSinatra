@@ -10,7 +10,7 @@ get '/' do
    
    ret = "Failed"
    ret = "Hello World from Sinatra & mongodb:" if db
-   ret += "...Got bookmarks" if coll
-   coll.find().each { |row| ret += row.inspect }
+   coll.find().each { |row| ret += row.inspect } if coll
+   ret += "No bookmarks" unless coll
    ret
 end
