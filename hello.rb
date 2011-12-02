@@ -14,3 +14,7 @@ get '/' do
    ret += "No bookmarks" unless coll
    ret
 end
+
+get '/env' do
+   ENV.inspect
+end
