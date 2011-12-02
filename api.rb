@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'uri'
 require 'mongo'
+require 'json'
 
 class MyAPI < Sinatra::Base
 	get '/' do
@@ -15,7 +16,9 @@ class MyAPI < Sinatra::Base
 	   ret += "No bookmarks" unless coll
 	   ret
 	end
-
+	get '/update' do
+       (JSON.parse(request.body.read)).to_json
+	end
 	get '/env' do
 	   ENV.inspect
 	end
