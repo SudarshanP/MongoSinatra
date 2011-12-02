@@ -1,2 +1,2 @@
-require './hello'
-run MyApp.new
+require './api'
+run MyAPI.new
