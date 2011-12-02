@@ -1,12 +1,13 @@
 require 'sinatra'
+require 'uri'
 require 'mongo'
 
 get '/' do
-   db = Connection.new(ENV['DATABASE_URL']).db(db_name)
+   uri = URI.parse(ENV['MONGOHQ_URL'])
+   conn = Mongo::Connection.from_uri(ENV['MONGOHQ_URL'])
+   db = conn.db(uri.path.gsub(/^\//, ''))
+   
    ret = "Failed"
-   if ENV['DATABASE_USER'] && ENV['DATABASE_PASSWORD']
-      auth = db.authenticate(ENV['DATABASE_USER'], ENV['DATABASE_PASSWORD'])
-      ret = "Hello World from Sinatra & mongodb:"
-   end
+   ret = "Hello World from Sinatra & mongodb:" if db
    ret
 end
