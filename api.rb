@@ -29,7 +29,7 @@ class MyAPI < Sinatra::Base
     end
     get '/list/:table' do    
        ret = ""
-       coll = getTable(:table)
+       coll = getTable(params[:table])
        coll.find().each { |row| ret += row.inspect + "<HR>" }    
        ret 
     end
