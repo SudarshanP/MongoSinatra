@@ -24,23 +24,13 @@ end
 class MyAPI < Sinatra::Base
 
     get '/' do    
-       ret = ""
-       coll = getTable('bookmarks')
-       
-       coll.find().each { |row| ret += row.inspect } if coll
-       ret += "No bookmarks" unless coll
-       ret += "<hr>"
-       
+       ret = "Welcome to the API"     
        ret 
     end
     get '/list/bookmarks' do    
        ret = ""
        coll = getTable('bookmarks')
-       if coll
-           coll.find().each { |row| ret += row.inspect + "<HR>" } 
-       else
-           ret += "No bookmarks"
-       end      
+       coll.find().each { |row| ret += row.inspect + "<HR>" }    
        ret 
     end
     post '/update/' do
