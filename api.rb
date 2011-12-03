@@ -2,7 +2,7 @@ require 'sinatra/base'
 require 'uri'
 require 'mongo'
 require 'json'
-require 'fixtures'
+require './fixtures'
 
 class MyAPI < Sinatra::Base
     get '/' do
