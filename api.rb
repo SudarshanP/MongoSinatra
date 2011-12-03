@@ -6,7 +6,7 @@ require 'json'
 class MyAPI < Sinatra::Base
 	get '/' do
 	   uri = URI.parse(ENV['MONGOHQ_URL'])
-	   conn = Mongo::Connection.from_uri(ENV['MONGOHQ_URL'])
+	   conn = Mongo::Connection.from_uri(ENV['MONGOHQ_URL']) || Mongo::Connection.new
 	   db = conn.db(uri.path.gsub(/^\//, ''))
 	   coll = db['bookmarks']
 	   
