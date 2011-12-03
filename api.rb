@@ -16,7 +16,7 @@ end
 
 def getTable(tbl)
     db = getDB()
-    puts db[tbl].inspect
+    #puts db[tbl].inspect
     return db[tbl]
 end
 
