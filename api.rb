@@ -27,7 +27,15 @@ class MyAPI < Sinatra::Base
        ret = "Welcome to the API"     
        ret 
     end
-    get '/list/:table' do    
+    get '/:table/list/:skip/:limit' do    
+       ret = ""
+       coll = getTable(params[:table])
+       l = params[:limit].to_i || 30
+       s = params[:skip].to_i || 0
+       coll.find().limit(l).skip(s).each { |row| ret += row.inspect + "<HR>" }    
+       ret 
+    end
+    get '/:table/list' do    
        ret = ""
        coll = getTable(params[:table])
        coll.find().each { |row| ret += row.inspect + "<HR>" }    
