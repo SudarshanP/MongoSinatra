@@ -4,25 +4,33 @@ require 'mongo'
 require 'json'
 require './fixtures'
 
+def getDB()
+    if ENV['MONGOHQ_URL'] 
+       uri = URI.parse(ENV['MONGOHQ_URL'])
+       conn = Mongo::Connection.from_uri(ENV['MONGOHQ_URL']) 
+       return conn.db(uri.path.gsub(/^\//, ''))
+    end
+    conn = Mongo::Connection.new
+    return conn['sample-db']
+end
+
+def getTable(tbl)
+    db = getDB()
+    puts db[tbl].inspect
+    return db[tbl]
+end
+
+
 class MyAPI < Sinatra::Base
-    get '/' do
-       if ENV['MONGOHQ_URL'] 
-           uri = URI.parse(ENV['MONGOHQ_URL'])
-           conn = Mongo::Connection.from_uri(ENV['MONGOHQ_URL']) 
-           db = conn.db(uri.path.gsub(/^\//, ''))
-       else 
-           conn = Mongo::Connection.new
-           db   = conn['sample-db']
-       end
+
+    get '/' do    
+       ret = ""
+       coll = getTable('bookmarks')
        
-       coll = db['bookmarks']
-       
-       ret = "Failed"
-       ret = "Hello World from Sinatra & mongodb:" if db
        coll.find().each { |row| ret += row.inspect } if coll
        ret += "No bookmarks" unless coll
        ret += "<hr>"
-       db.collection_names.each { |name| ret+= name +"<br>"}
+       
        ret 
     end
     post '/update/' do
@@ -31,9 +39,13 @@ class MyAPI < Sinatra::Base
        s
     end
     get '/env' do
-       ENV.inspect
+       ret = ENV.inspect
+       ret += "<hr>"
+       getDB().collection_names.each { |name| ret+= name +"<br>"}
+       ret
     end
     get '/fixtures' do
        initial_bookmarks(nil)
+       "hi"
     end
 end
