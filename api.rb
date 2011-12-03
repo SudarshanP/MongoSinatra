@@ -41,6 +41,12 @@ class MyAPI < Sinatra::Base
        coll.find().each { |row| ret += row.inspect + "<HR><HR>" }    
        ret 
     end
+    get '/:table/:id' do    
+       ret = ""
+       id = BSON::ObjectId(params[:id])
+       coll = getTable(params[:table])
+       coll.find_one({'_id'=>id}).inspect  
+    end
     post '/update/' do
        s = request.body.read
        puts s
