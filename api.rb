@@ -38,7 +38,7 @@ class MyAPI < Sinatra::Base
     get '/:table/list' do    
        ret = ""
        coll = getTable(params[:table])
-       coll.find().each { |row| ret += row.inspect + "<HR>" }    
+       coll.find().each { |row| ret += row.inspect + "<HR><HR>" }    
        ret 
     end
     post '/update/' do
