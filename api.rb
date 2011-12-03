@@ -22,7 +22,7 @@ class MyAPI < Sinatra::Base
        coll.find().each { |row| ret += row.inspect } if coll
        ret += "No bookmarks" unless coll
        ret += "<hr>"
-       db.collection_names.each { |name| ret+= name }
+       db.collection_names.each { |name| ret+= name +"<br>"}
        ret 
     end
     post '/update/' do
