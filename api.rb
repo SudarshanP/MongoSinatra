@@ -33,4 +33,7 @@ class MyAPI < Sinatra::Base
     get '/env' do
        ENV.inspect
     end
+    get '/fixtures' do
+       initial_bookmarks(nil)
+    end
 end
