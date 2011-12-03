@@ -2,7 +2,7 @@ require 'sinatra/base'
 require 'uri'
 require 'mongo'
 require 'json'
-require 'fixtures'
+#require 'fixtures'
 
 class MyAPI < Sinatra::Base
     get '/' do
@@ -21,7 +21,7 @@ class MyAPI < Sinatra::Base
        ret = "Hello World from Sinatra & mongodb:" if db
        coll.find().each { |row| ret += row.inspect } if coll
        ret += "No bookmarks" unless coll
-       ret + mrk()
+       ret #+ mrk()
     end
     post '/update/' do
        s = request.body.read
