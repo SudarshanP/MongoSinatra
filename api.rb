@@ -33,6 +33,16 @@ class MyAPI < Sinatra::Base
        
        ret 
     end
+    get '/list/bookmarks' do    
+       ret = ""
+       coll = getTable('bookmarks')
+       if coll
+           coll.find().each { |row| ret += row.inspect + "<HR>" } 
+       else
+           ret += "No bookmarks"
+       end      
+       ret 
+    end
     post '/update/' do
        s = request.body.read
        puts s
