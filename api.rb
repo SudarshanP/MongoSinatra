@@ -21,7 +21,9 @@ class MyAPI < Sinatra::Base
        ret = "Hello World from Sinatra & mongodb:" if db
        coll.find().each { |row| ret += row.inspect } if coll
        ret += "No bookmarks" unless coll
-       ret + mrk()
+       ret += "<hr>"
+       db.collection_names.each { |name| ret+= name }
+       ret 
     end
     post '/update/' do
        s = request.body.read
