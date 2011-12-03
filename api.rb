@@ -27,9 +27,9 @@ class MyAPI < Sinatra::Base
        ret = "Welcome to the API"     
        ret 
     end
-    get '/list/bookmarks' do    
+    get '/list/:table' do    
        ret = ""
-       coll = getTable('bookmarks')
+       coll = getTable(:table)
        coll.find().each { |row| ret += row.inspect + "<HR>" }    
        ret 
     end
