@@ -2,13 +2,22 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script type="text/javascript" src="db.js"></script>
 <script type='text/javascript'>
+function Insert() {
+   t = $('#tbl').val();
+   pk = $('#pk').val();
+   d = $('#data').val();
+   db.insert(t,d);
+}
 function Update() {
-   d = $('#updatebox').val();
-   db.update("",d);
+   d = $('#data').val();
+   pk = $('#pk').val();
+   db.update(tbl,pk,d);
 }
 </script>
 <body>
-<input type='textbox' id='updatebox' value='{}' size='20' />
+Table Name: <input type='text' id='tbl' value='test'> Id:<input type='text' id='pk' value=''><br>
+<textarea id='data' size='20' />[1,2,3]</textarea><br>
+<input type='submit' value='Insert' onClick='Insert(); return false' />
 <input type='submit' value='Update' onClick='Update(); return false' />
 </body>
 </html>

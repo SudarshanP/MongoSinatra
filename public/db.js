@@ -25,8 +25,9 @@ db.get = function (path) {
 }
 db.list = function (path,pgnum,perpg) {
 }
-db.insert = function (path,data) {
-   db._post("/insert/"+path,data,handler);
+db.insert = function (tbl,data) {
+   alert(tbl+":"+data);
+   db._post("/"+tbl+"/insert",data,handler);
 }
 db.update = function (path,data) {
    db._post("/update/"+path,data,handler);

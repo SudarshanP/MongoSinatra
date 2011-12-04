@@ -47,10 +47,30 @@ class MyAPI < Sinatra::Base
        coll = getTable(params[:table])
        coll.find_one({'_id'=>id}).inspect  
     end
-    post '/update/' do
+    post '/:table/insert' do
+       begin
+          s = request.body.read
+          doc = JSON.parse(s)
+          coll = getTable(params[:table])
+          puts coll.inspect
+          ret = coll.insert(doc)
+          return "Inserted as :"+ret.inspect
+       rescue
+          puts "Bad JSON:"+s
+          return "bad JSON"
+       end
+    end
+    post '/:table/update/:id' do
        s = request.body.read
        puts s
        s
+    end
+    get '/:table/delete/:id' do    
+       ret = ""
+       coll = getTable(params[:table])
+       id = BSON::ObjectId(params[:id])
+       coll.remove({'_id'=>id})    
+       ""
     end
     get '/env' do
        ret = ENV.inspect
