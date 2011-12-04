@@ -52,7 +52,6 @@ class MyAPI < Sinatra::Base
           s = request.body.read
           doc = JSON.parse(s)
           coll = getTable(params[:table])
-          puts coll.inspect
           ret = coll.insert(doc)
           return "Inserted as :"+ret.inspect
        rescue
@@ -61,9 +60,22 @@ class MyAPI < Sinatra::Base
        end
     end
     post '/:table/update/:id' do
-       s = request.body.read
-       puts s
-       s
+       begin
+          puts "aaaa"
+          id = BSON::ObjectId(params[:id])
+          s = request.body.read
+          doc = JSON.parse(s)
+          puts "bbbb"
+          coll = getTable(params[:table])
+          puts "cccc"
+          ret = coll.update({'_id'=>id},doc)
+          puts "dddd"
+          #puts id+">>>"+doc
+          return "Updated :"+id.inspect
+       rescue
+          puts "Bad JSON:"+s
+          return "bad JSON"
+       end
     end
     get '/:table/delete/:id' do    
        ret = ""

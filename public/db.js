@@ -29,8 +29,8 @@ db.insert = function (tbl,data) {
    alert(tbl+":"+data);
    db._post("/"+tbl+"/insert",data,handler);
 }
-db.update = function (path,data) {
-   db._post("/update/"+path,data,handler);
+db.update = function (tbl,id,data) {
+   db._post("/"+tbl+"/update/"+id,data,handler);
 }
 db.delete  = function (path,data) {
    db._post("/delete/"+path,handler);

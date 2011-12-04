@@ -9,9 +9,10 @@ function Insert() {
    db.insert(t,d);
 }
 function Update() {
+   t = $('#tbl').val();
    d = $('#data').val();
    pk = $('#pk').val();
-   db.update(tbl,pk,d);
+   db.update(t,pk,d);
 }
 </script>
 <body>
