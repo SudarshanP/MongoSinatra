@@ -27,7 +27,7 @@ def JSONResponse(results)
       r["_id"]=r["_id"]["$oid"]
       rows << r 
    end    
-   JSON.generate({"rows"=>rows})
+   JSON.generate({"rows"=>rows,"success"=>true})
 end
 
 class MyAPI < Sinatra::Base
@@ -41,8 +41,7 @@ class MyAPI < Sinatra::Base
        coll = getTable(params[:table])
        l = params[:limit].to_i || 30
        s = params[:skip].to_i || 0
-       ret = coll.find().limit(l).skip(s) #.each { |row| ret += row.inspect + "<HR>" }    
-       JSON.generate(ret) 
+       JSONResponse(coll.find().limit(l).skip(s))
     end
     get '/:table/list' do    
        ret = ""
@@ -62,37 +61,35 @@ class MyAPI < Sinatra::Base
           s = request.body.read
           doc = JSON.parse(s)
           coll = getTable(params[:table])
-          ret = coll.insert(doc)
-          return "Inserted as :"+ret.inspect
-       rescue
-          puts "Bad JSON:"+s
-          return "bad JSON"
+          r = coll.insert(doc)
+          ret = {"sucess"=>true,"_id"=>r.to_s,"op"=>"i"}
+       rescue Exception => e
+          puts "Exception:"+e
+          ret = {"sucess"=>false,"input"=>s,"table"=>params[:table],"exception"=>e.to_s}          
        end
+       return JSON.generate(ret)
     end
     post '/:table/update/:id' do
        begin
-          puts "aaaa"
           id = BSON::ObjectId(params[:id])
           s = request.body.read
           doc = JSON.parse(s)
-          puts "bbbb"
           coll = getTable(params[:table])
-          puts "cccc"
           ret = coll.update({'_id'=>id},doc)
-          puts "dddd"
-          #puts id+">>>"+doc
-          return "Updated :"+id.inspect
+          ret = {"sucess"=>true,"_id"=>params[:id],"op"=>"u"}
        rescue
-          puts "Bad JSON:"+s
-          return "bad JSON"
+          puts "Exception:"+e
+          ret = {"sucess"=>false,"input"=>s,"table"=>params[:table],"exception"=>e.to_s}  
        end
+       return JSON.generate(ret)
     end
     get '/:table/delete/:id' do    
        ret = ""
        coll = getTable(params[:table])
        id = BSON::ObjectId(params[:id])
-       coll.remove({'_id'=>id})    
-       ""
+       coll.remove({'_id'=>id}) 
+       ret = {"sucess"=>true,"_id"=>params[:id],"op"=>"d"} 
+       return JSON.generate(ret)  
     end
     get '/env' do
        ret = ENV.inspect
