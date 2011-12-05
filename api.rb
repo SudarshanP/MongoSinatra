@@ -20,6 +20,15 @@ def getTable(tbl)
     return db[tbl]
 end
 
+def JSONResponse(results)
+   rows = []
+   results.each do |row| 
+      r = JSON.parse(JSON.generate(row))
+      r["_id"]=r["_id"]["$oid"]
+      rows << r 
+   end    
+   JSON.generate({"rows"=>rows})
+end
 
 class MyAPI < Sinatra::Base
 
@@ -32,20 +41,21 @@ class MyAPI < Sinatra::Base
        coll = getTable(params[:table])
        l = params[:limit].to_i || 30
        s = params[:skip].to_i || 0
-       coll.find().limit(l).skip(s).each { |row| ret += row.inspect + "<HR>" }    
-       ret 
+       ret = coll.find().limit(l).skip(s) #.each { |row| ret += row.inspect + "<HR>" }    
+       JSON.generate(ret) 
     end
     get '/:table/list' do    
        ret = ""
        coll = getTable(params[:table])
-       coll.find().each { |row| ret += row.inspect + "<HR><HR>" }    
-       ret 
+       JSONResponse(coll.find()) 
     end
     get '/:table/:id' do    
        ret = ""
        id = BSON::ObjectId(params[:id])
        coll = getTable(params[:table])
-       coll.find_one({'_id'=>id}).inspect  
+       ob = coll.find_one({'_id'=>id})  
+       ob["_id"] = params[:id]
+       JSON.generate(ob)
     end
     post '/:table/insert' do
        begin
